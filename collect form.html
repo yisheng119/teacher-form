@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教师乒乓球比赛资料报名收集表</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:"微软雅黑",sans-serif;}
+        body{background:#f0f4f8;padding:20px;}
+        .wrap{max-width:680px;margin:0 auto;background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 15px #00000015;}
+        h2{text-align:center;color:#222;margin-bottom:8px;}
+        .tip{text-align:center;color:#666;font-size:14px;margin-bottom:30px;}
+        .item{margin-bottom:22px;}
+        label{display:block;margin-bottom:6px;font-weight:600;color:#333;}
+        label span{color:red;}
+        input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:15px;}
+        textarea{height:110px;resize:none;}
+        .count{text-align:right;font-size:13px;color:#888;margin-top:4px;}
+        .upload-box{border:2px dashed #ccc;padding:16px;text-align:center;border-radius:8px;cursor:pointer;}
+        .upload-box:hover{border-color:#409eff;}
+        .preview{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
+        .preview img{width:90px;height:90px;object-fit:cover;border-radius:6px;border:1px solid #eee;}
+        button{width:100%;padding:13px;background:#409eff;color:#fff;border:none;border-radius:6px;font-size:16px;cursor:pointer;}
+        button:hover{background:#337ecc;}
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h2>教师乒乓球比赛资料报名收集表</h2>
+    <div class="tip">请上传您的正面、背面、侧面三张照片，以及您自己的个人简介（100字以内）</div>
+    <form id="form">
+        <div class="item">
+            <label>姓名 <span>*</span></label>
+            <input type="text" id="name" placeholder="请输入您的姓名">
+        </div>
+
+        <div class="item">
+            <label>正面照 <span>*</span></label>
+            <div class="upload-box" onclick="document.getElementById('img1').click()">点击上传正面全身照</div>
+            <input type="file" id="img1" accept="image/*" hidden>
+            <div class="preview" id="pre1"></div>
+        </div>
+
+        <div class="item">
+            <label>背面照 <span>*</span></label>
+            <div class="upload-box" onclick="document.getElementById('img2').click()">点击上传背面全身照</div>
+            <input type="file" id="img2" accept="image/*" hidden>
+            <div class="preview" id="pre2"></div>
+        </div>
+
+        <div class="item">
+            <label>侧面照 <span>*</span></label>
+            <div class="upload-box" onclick="document.getElementById('img3').click()">点击上传侧面全身照</div>
+            <input type="file" id="img3" accept="image/*" hidden>
+            <div class="preview" id="pre3"></div>
+        </div>
+
+        <div class="item">
+            <label>个人简介（100字以内）<span>*</span></label>
+            <textarea id="intro" maxlength="100" placeholder="请填写个人简介"></textarea>
+            <div class="count"><span id="num">0</span>/100</div>
+        </div>
+
+        <button type="submit">提交资料</button>
+    </form>
+</div>
+
+<script>
+// 字数统计
+let intro = document.getElementById('intro');
+let num = document.getElementById('num');
+intro.oninput = function(){
+    num.innerText = this.value.length;
+}
+
+// 图片预览
+function upFile(fileId,preId){
+    let file = document.getElementById(fileId);
+    let pre = document.getElementById(preId);
+    file.onchange = function(e){
+        pre.innerHTML = '';
+        let f = e.target.files[0];
+        if(!f)return;
+        let img = new Image();
+        img.src = URL.createObjectURL(f);
+        img.style.width = '90px';
+        img.style.height = '90px';
+        img.style.objectFit = 'cover';
+        pre.appendChild(img);
+    }
+}
+upFile('img1','pre1');
+upFile('img2','pre2');
+upFile('img3','pre3');
+
+// 表单验证
+document.getElementById('form').onsubmit = function(e){
+    e.preventDefault();
+    let name = document.getElementById('name').value.trim();
+    let i1 = document.getElementById('img1').files.length;
+    let i2 = document.getElementById('img2').files.length;
+    let i3 = document.getElementById('img3').files.length;
+    let introVal = document.getElementById('intro').value.trim();
+
+    if(!name)return alert('请填写姓名');
+    if(i1===0)return alert('请上传正面照');
+    if(i2===0)return alert('请上传背面照');
+    if(i3===0)return alert('请上传侧面照');
+    if(!introVal)return alert('请填写个人简介');
+
+    alert('提交成功！');
+    this.reset();
+    num.innerText = 0;
+    document.querySelectorAll('.preview').forEach(el=>el.innerHTML='');
+}
+</script>
+</body>
+</html>
